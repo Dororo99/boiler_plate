@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
-
+const bcrypt = require('bcrypt')
+const saltRounds = 10;
 
 const userSchema = mongoose.Schema({
     name: {
@@ -29,6 +30,30 @@ const userSchema = mongoose.Schema({
     },
     tokenExp: {
         type: Number
+    }
+})
+
+// 스키마.pre를 사용하면 모델이 저장되기 전에 실행되는 함수를 만들 수 있다.
+userSchema.pre('save', function (next) {
+    var user = this
+    if (user.isModified('password')) {
+        // Only encrypt password if change password by using bcrypt
+        bcrypt.genSalt(saltRounds)
+            .then(salt => {
+                bcrypt.hash(user.password, salt)
+                    .then(hash => {
+                        user.password = hash
+                        next()
+                    })
+                    .catch((err) => {
+                        next(err)
+                    })
+            })
+            .catch((err) => {
+                next(err)
+            })
+    } else {
+        next()
     }
 })
 

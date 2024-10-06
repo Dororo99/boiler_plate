@@ -27,6 +27,8 @@ app.post('/register', (req, res) => {
     // 그것들을 db에 넣어준다.
     const user = new User(req.body)
 
+    // save 전에 비밀번호 암호화
+    
     user.save()
         .then((userInfo) => {
             res.status(200).json({ success: true })
