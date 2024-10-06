@@ -4,14 +4,14 @@ const port = 3000
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const { User } = require('./models/User')
-const url = 'mongodb+srv://99dororo:sg1301@sangsiru.tifxa.mongodb.net/?retryWrites=true&w=majority&appName=sangsiru'
+const config = require('./config/key')
 
 // application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 // application/json
 app.use(bodyParser.json());
 
-mongoose.connect(url)
+mongoose.connect(config.MONGO_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 
