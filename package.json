@@ -1,16 +1,16 @@
 {
   "name": "boiler-plate",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "backend": "nodemon index.js"
   },
   "author": "dororo",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.3",
     "express": "^4.21.0",
     "mongodb": "^6.9.0",
     "mongoose": "^7.6.3",
