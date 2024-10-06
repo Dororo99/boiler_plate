@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const { User } = require('./models/User')
 const config = require('./config/key')
 const cookieParser = require('cookie-parser')
+const { auth } = require('./middleware/auth')
 
 
 // application/x-www-form-urlencoded
@@ -42,7 +43,7 @@ app.post('/register', (req, res) => {
 })
 
 // login 기능 구현
-app.post('/login', async (req, res) => {
+app.post('/api/users/login', async (req, res) => {
     try {
         // 1. db안에서 요청된 이메일 찾기
         const userInfo = await User.findOne({ email: req.body.email });
@@ -75,6 +76,21 @@ app.post('/login', async (req, res) => {
         return res.status(500).json({ loginSuccess: false, err });
     }
 });
+
+// Auth 기능 구현
+app.get('api/users/auth', auth, (req, res) => {
+    // 여기까지 오면 Authentication true의 의미
+    res.status(200).json({
+        _id: req.user._id,
+        isAdmin: req.user.role === 0 ? false : true, // role 0 -> 일반유저, 아니면 어드민
+        isAuth: true,
+        email: req.user.email,
+        name: req.user.name,
+        lastname: req.user.lastname,
+        role: req.user.role,
+        image: req.user.image
+    })
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
